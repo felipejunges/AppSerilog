@@ -18,16 +18,13 @@ namespace AppSerilog
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
-                .Enrich.FromLogContext()
-                .Enrich.WithProperty("App", "PocSerilog")
                 .CreateLogger();
 
             using (LogContext.PushProperty("NumeroCliente", "1234"))
             {
-                Log.Information("Teste 1");
-                Log.Logger.Information("Teste 2");
+                Log.Information("Teste X1");
             }
-            Log.ForContext("NumeroCliente", 12345).Information("Teste 3");
+            Log.ForContext("NumeroCliente", 12345).Information("Teste X2");
 
             //Log.Error(new Exception("Could not find file"), "Não foi possível escrever no arquivo {NomeArquivo}", "nome_arquivo.txt");
 
