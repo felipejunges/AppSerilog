@@ -19,8 +19,13 @@ namespace AppSerilog
                 .ReadFrom.Configuration(Configuration)
                 .CreateLogger();
 
-            Log.Information("Teste");
-            Log.Error(new Exception("Teste de erro"), "Error!");
+            // Log.Information("Teste");
+            // Log.Error(new Exception("Teste de erro"), "Error!");
+
+            // var exampleUser = new User { Id = 1, Name = "Adam", Created = DateTime.Now };
+            // Log.Information("Created {@User} on {Created}", exampleUser, DateTime.Now);
+
+            Log.Warning("Teste número do cliente: {NumeroCliente}", 10201111);
 
             Console.WriteLine("Hello World!");
 
