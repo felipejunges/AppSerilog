@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
+using Serilog.Context;
 using System;
 using System.IO;
 
@@ -17,15 +18,24 @@ namespace AppSerilog
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("App", "PocSerilog")
                 .CreateLogger();
 
-            // Log.Information("Teste");
-            // Log.Error(new Exception("Teste de erro"), "Error!");
+            using (LogContext.PushProperty("NumeroCliente", "1234"))
+            {
+                Log.Information("Teste 1");
+                Log.Logger.Information("Teste 2");
+            }
+            Log.ForContext("NumeroCliente", 12345).Information("Teste 3");
+
+            //Log.Error(new Exception("Could not find file"), "Não foi possível escrever no arquivo {NomeArquivo}", "nome_arquivo.txt");
 
             // var exampleUser = new User { Id = 1, Name = "Adam", Created = DateTime.Now };
             // Log.Information("Created {@User} on {Created}", exampleUser, DateTime.Now);
 
-            Log.Warning("Teste número do cliente: {NumeroCliente}", 10201111);
+            // Log.Warning("Teste número do cliente: {NumeroCliente}", 10201111);
+            // Log.Warning<int, string>("Teste número do cliente: {NumeroCliente} - Nome: {Nome}", 10201112, "Felipe");
 
             Console.WriteLine("Hello World!");
 
