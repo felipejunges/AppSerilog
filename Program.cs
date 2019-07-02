@@ -20,10 +20,11 @@ namespace AppSerilog
                 .CreateLogger();
 
             Log.Information("Teste");
-            Log.Logger.Information("Teste2");
-            Log.Logger.Warning("Teste3");
+            Log.Error(new Exception("Teste de erro"), "Error!");
 
             Console.WriteLine("Hello World!");
+
+            Log.CloseAndFlush();
         }
     }
 }
