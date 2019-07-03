@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Context;
+using Serilog.Formatting.Elasticsearch;
+using Serilog.Sinks.Elasticsearch;
 using System;
 using System.IO;
 
@@ -18,15 +20,20 @@ namespace AppSerilog
         {
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(Configuration)
+                .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri("http://localhost:9200"))
+                {
+                    IndexDecider = (@event,offset) => "test_elapsedtimes",
+                    CustomFormatter = new ElasticsearchJsonFormatter()
+                })
                 .CreateLogger();
 
-            using (LogContext.PushProperty("NumeroCliente", "1234"))
-            {
-                Log.Information("Teste X1");
-            }
-            Log.ForContext("NumeroCliente", 12345).Information("Teste X2");
+            // using (LogContext.PushProperty("NumeroCliente", "1234"))
+            // {
+            //     Log.Information("Teste X1");
+            // }
+            // Log.ForContext("NumeroCliente", 12345).Information("Teste X2");
 
-            //Log.Error(new Exception("Could not find file"), "Não foi possível escrever no arquivo {NomeArquivo}", "nome_arquivo.txt");
+            Log.Error(new Exception("Could not find file"), "Não foi possível escrever no arquivo {NomeArquivo}", "nome_arquivo.txt");
 
             // var exampleUser = new User { Id = 1, Name = "Adam", Created = DateTime.Now };
             // Log.Information("Created {@User} on {Created}", exampleUser, DateTime.Now);
